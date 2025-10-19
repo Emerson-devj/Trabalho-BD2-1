@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db: 
+    image: postgres:16-alpine
+    container_name: postgres_server
+    restart: unless-stopped
+    
+    environment:
+      # Preencha com as suas escolhas:
+      POSTGRES_USER: 'Emerson'           # <--- SEU USUÁRIO
+      POSTGRES_PASSWORD: 'unifesspa' # <--- SUA SENHA
+      POSTGRES_DB: 'Trabalho'   # <--- NOME DO SEU BANCO
+
+    # O resto das configurações são técnicas e não precisam ser alteradas:
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
